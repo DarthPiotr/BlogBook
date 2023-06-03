@@ -1,0 +1,43 @@
+﻿@page
+@model BlogBook.Pages.LoginModel 
+@{
+}
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Logowanie</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Model.Email" class="control-label"></label>
+                <input asp-for="Model.Email" class="form-control" />
+                <span asp-validation-for="Model.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model.Password" class="control-label"></label>
+                <input asp-for="Model.Password" class="form-control" />
+                <span asp-validation-for="Model.Password" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="checkbox" asp-for="Model.RememberMe" class="form-check-input" />
+				<label asp-for="Model.RememberMe" class="control-label"></label>
+				<span asp-validation-for="Model.Password" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+                <input type="submit" value="Zaloguj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,49 @@
+﻿@page
+@model BlogBook.Pages.RegisterModel
+@{
+}
+
+@{
+    ViewData["Title"] = "Rejestracja";
+}
+
+<h1>Rejestracja</h1>
+
+<h4>Użytkownik</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Model.Username" class="control-label"></label>
+                <input asp-for="Model.Username" class="form-control" />
+                <span asp-validation-for="Model.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model.Email" class="control-label"></label>
+                <input asp-for="Model.Email" class="form-control" />
+                <span asp-validation-for="Model.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model.Password" class="control-label"></label>
+                <input asp-for="Model.Password" class="form-control" />
+                <span asp-validation-for="Model.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model.ConfirmPassword" class="control-label"></label>
+                <input asp-for="Model.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zarejestruj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

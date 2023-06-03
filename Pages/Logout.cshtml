@@ -1,0 +1,18 @@
+﻿@page
+@model BlogBook.Pages.LogoutModel
+@{
+}
+
+
+<h1>Wylogowanie</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <p>Czy na pewno chcesz się wylogować?</p>
+            <button class="btn btn-primary" asp-page-handler="Logout">Tak</button>
+            <button class="btn btn-light m-lg-5 border-dark" asp-page-handler="NoLogout">Nie</button>
+        </form>
+    </div>
+</div>
