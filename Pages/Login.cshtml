@@ -12,6 +12,19 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @{
+            if (ViewData.ContainsKey("Message"))
+            {
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill" /></svg>
+                    <div>
+                        @ViewData["Message"]
+                    </div>
+                </div>
+            }
+        }
+
+
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">

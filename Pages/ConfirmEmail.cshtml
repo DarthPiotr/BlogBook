@@ -1,0 +1,23 @@
+﻿@page
+@model BlogBook.Pages.ConfirmEmailModel
+@{
+    ViewData["Title"] = "Potwierdzenie adresu Email";
+}
+
+<h2>Potwierdzenie adresu Email</h2>
+<div>
+
+    @{
+        if (ViewData.ContainsKey("Success"))
+        {
+            <p>
+                Dziękujemy za potwierdzenie adresu email. <a asp-area="" asp-page="/Login">Kliknij tutaj, aby się zalogować.</a>
+            </p>
+        } else
+        {
+            <p>
+                Coś poszło nie tak :/.
+            </p>
+        }
+    }
+</div>
