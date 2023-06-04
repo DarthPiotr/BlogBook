@@ -5,15 +5,17 @@
 }
 
 <h2>Potwierdzenie adresu Email</h2>
+<hr />
 <div>
 
     @{
         if (ViewData.ContainsKey("Success"))
         {
             <p>
-                Dziękujemy za potwierdzenie adresu email. <a asp-area="" asp-page="/Login">Kliknij tutaj, aby się zalogować.</a>
+				Dziękujemy za potwierdzenie adresu email! Kliknij <a asp-area="" asp-page="/Login">tutaj</a>, aby się zalogować.
             </p>
-        } else
+        }
+        else
         {
             <p>
                 Coś poszło nie tak :/.

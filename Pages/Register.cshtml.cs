@@ -37,7 +37,7 @@ namespace BlogBook.Pages
             {
                 var user = new IdentityUser()
                 {
-                    UserName = Model.Email,
+                    UserName = Model.Username,
                     Email = Model.Email
                 };
 
@@ -62,7 +62,7 @@ namespace BlogBook.Pages
 
                     await _sender.SendEmailAsync(user.Email, "Weryfikacja BlogBook", body);
 
-					return RedirectToPage("Index");
+					return RedirectToPage("Login", new { email=user.Email });
                 }
 
                 foreach (var error in result.Errors)

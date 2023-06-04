@@ -1,56 +1,60 @@
 ﻿@page
-@model BlogBook.Pages.LoginModel 
+@model BlogBook.Pages.LoginModel
 @{
 }
 
 @{
-    ViewData["Title"] = "Login";
+	ViewData["Title"] = "Login";
 }
 
 <h1>Logowanie</h1>
 
 <hr />
+@{
+	if (ViewData.ContainsKey("Message"))
+	{
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					<div>
+						@Html.Raw(ViewData["Message"])
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
 <div class="row">
-    <div class="col-md-4">
-        @{
-            if (ViewData.ContainsKey("Message"))
-            {
-                <div class="alert alert-warning d-flex align-items-center" role="alert">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill" /></svg>
-                    <div>
-                        @ViewData["Message"]
-                    </div>
-                </div>
-            }
-        }
+	<div class="col-md-4">
 
 
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Model.Email" class="control-label"></label>
-                <input asp-for="Model.Email" class="form-control" />
-                <span asp-validation-for="Model.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Model.Password" class="control-label"></label>
-                <input asp-for="Model.Password" class="form-control" />
-                <span asp-validation-for="Model.Password" class="text-danger"></span>
+		<form method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="Model.Email" class="control-label"></label>
+				<input asp-for="Model.Email" class="form-control" />
+				<span asp-validation-for="Model.Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Model.Password" class="control-label"></label>
+				<input asp-for="Model.Password" class="form-control" />
+				<span asp-validation-for="Model.Password" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<input type="checkbox" asp-for="Model.RememberMe" class="form-check-input" />
 				<label asp-for="Model.RememberMe" class="control-label"></label>
 				<span asp-validation-for="Model.Password" class="text-danger"></span>
 			</div>
-            <div class="form-group">
-                <input type="submit" value="Zaloguj" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+			<div class="form-group">
+				<input type="submit" value="Zaloguj" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }

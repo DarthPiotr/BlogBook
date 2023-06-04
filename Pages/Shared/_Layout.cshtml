@@ -52,7 +52,7 @@
 								if (SignInManager.IsSignedIn(User))
 								{
 									<li class="nav-item">
-										<a class="nav-link" asp-area="" asp-page="/Profile"> @User.Identity.Name </a>
+										<a class="nav-link" asp-area="" asp-page="/Profile"><strong>@User.Identity.Name</strong></a>
 									</li>
 									<li class="nav-item nav-button">
 										<a class="nav-link" asp-area="" asp-page="/Logout">Wyloguj</a>

@@ -31,15 +31,14 @@ namespace BlogBook.Pages
             }
             
             var user = await userManager.FindByIdAsync(userId);
-            if (user != null)
+            if (user == null)
+                return Page();
+
+            var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await userManager.ConfirmEmailAsync(user, decodedCode);
+            if (result.Succeeded)
             {
-                var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-                var result = await userManager.ConfirmEmailAsync(user, decodedCode);
-                if (result.Succeeded)
-                {
-                    ViewData["Success"] = true;
-                    return Page();
-                }
+                ViewData["Success"] = true;
             }
 
             return Page();

@@ -20,14 +20,19 @@ namespace BlogBook.Pages
 
 		}
 
-		public void OnGet()
+		public IActionResult OnGet(string email = "")
         {
+			if (!String.IsNullOrEmpty(email))
+			{
+				ViewData["Message"] = $"Na adres <strong>{email}</strong> zosta³ wys³any mail z linkiem do aktywacji konta.";
+			}
+            return Page();
         }
 
 		public async Task<IActionResult> OnPostAsync(string ReturnUrl = "")
 		{
             // Require the user to have a confirmed email before they can log on.
-            var user = await userManager.FindByNameAsync(Model.Email);
+            var user = await userManager.FindByEmailAsync(Model.Email);
             if (user != null)
             {
                 if (!await userManager.IsEmailConfirmedAsync(user))
@@ -39,7 +44,7 @@ namespace BlogBook.Pages
 
             if (ModelState.IsValid)
 			{
-				var identityResult = await signInManager.PasswordSignInAsync(Model.Email, Model.Password, Model.RememberMe, false);
+				var identityResult = await signInManager.PasswordSignInAsync(user?.UserName ?? "", Model.Password, Model.RememberMe, false);
 				if (identityResult.Succeeded)
 				{
 					if (String.IsNullOrEmpty(ReturnUrl) || ReturnUrl == "/")
