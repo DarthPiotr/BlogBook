@@ -11,12 +11,6 @@ namespace BlogBook.Pages
         private UserManager<IdentityUser> userManager;
         private SignInManager<IdentityUser> signInManager;
 
-        // https://localhost:7275/ConfirmEmail?
-        // area=Identity&
-        // userId=a27370f8-4998-4201-8ea5-dbfdf8f87bc2&
-        // code=Q2ZESjhBZWg3SzBZWWo1SnFpVHFCWC8xV3d0NmxvdTZSMGU0NWlrOVJrR0daL2wzYnp5WmpRSWw4WmEweGh3Q2tPb2lJN1liZTh6WmhhYzMzeUVKejgySTNzS3N3SnF1MitJN2V5aStrR0VzbFJVOEkwVGRJaGNWcmRoRHdUa1h0WkppVFk5WVlUVk8vdG9ybnpnZCsxVWgyWk1iLzBGcGN6QU5Ma0Y1VGFRdmk1ZGh2bnR1ZnQ0c3NQbEhJbXNPM08waXNLUU1oUTF0bWdFdVBLT2NGcDEvWXcvMkFrd1ZOSlVYbENwRHpjZHFuK1Ntb0gwK05MNGdFbWZlQUk0bXJJU05VQT09&
-        // returnUrl=%2F
-
         public ConfirmEmailModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
