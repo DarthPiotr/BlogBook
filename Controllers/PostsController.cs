@@ -33,16 +33,14 @@ namespace BlogBook.Controllers
                     .Where(p => EF.Functions.Like(p.Content, $"%{query}%") || 
                                 EF.Functions.Like(p.Title, $"%{query}%") || 
                                 EF.Functions.Like(p.User.UserName, $"%{query}%"))
-                //var filteredContext = _context.Post.Where(p => p.Content.Contains(query, StringComparison.OrdinalIgnoreCase) 
-                //|| p.Title.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-                //|| p.User.UserName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-                //)
-                .Include(p => p.User);
+                .Include(p => p.User)
+                .OrderByDescending(p => p.PostDate);
 
                 return View(await filteredContext.ToListAsync());
             }
 
-			var blogbookDbContext = _context.Post.Include(p => p.User);
+			var blogbookDbContext = _context.Post.Include(p => p.User)
+                .OrderByDescending(p => p.PostDate);
 			return View(await blogbookDbContext.ToListAsync());
 		}
 
@@ -86,6 +84,7 @@ namespace BlogBook.Controllers
             if (user != null)
             {
                 post.PostDate = DateTime.Now;
+                post.EditDate = post.PostDate;
                 post.Likes = 0;
                 post.UserId = user.Id;
                 post.User = user;
@@ -133,6 +132,16 @@ namespace BlogBook.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                post.User = user;
+				post.EditDate = DateTime.Now;
+
+				ModelState.Clear();
+                TryValidateModel(post, nameof(Post));
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -151,7 +160,7 @@ namespace BlogBook.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "/Posts");
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", post.UserId);
             return View(post);

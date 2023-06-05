@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 
 namespace BlogBook.Model
 {
@@ -17,15 +18,23 @@ namespace BlogBook.Model
 		public IdentityUser User { get; set; } = null!;
 
 		[Required]
+		[DisplayName("Tytuł")]
 		public string? Title { get; set; }
 
 		[Required]
-		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-		public DateTime PostDate { get; set; } = DateTime.Now;
+		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy, HH:mm}", ApplyFormatInEditMode = true)]
+		public DateTime PostDate { get; set; }
 
+
+		[DataType(DataType.DateTime)]
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy, HH:mm}", ApplyFormatInEditMode = true)]
+		public DateTime EditDate { get; set; }
+
+		[DisplayName("Treść")]
 		public string? Content { get; set; }
 
+		[DisplayName("Polubienia")]
 		public int Likes { get; set; } = 0;
 
 	}

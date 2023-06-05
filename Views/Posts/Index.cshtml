@@ -15,11 +15,14 @@
 	}
 }
 
-<h1>Index</h1>
-
-<p>
-	<a asp-action="Create">Create New</a>
-</p>
+<div class="card shadow-sm">
+	<div class="card-header d-flex">
+		<div class="flex-grow-1 bd-highlight"><strong>Co się dzieje?</strong></div>
+	</div>
+	<div class="card-body">
+		<a asp-action="Create" class="form-control">Napisz coś...</a>
+	</div>
+</div>
 
 @foreach (var item in Model)
 {
@@ -27,11 +30,19 @@
 	<div class="card shadow-sm">
 		<div class="card-header d-flex">
 			<div class="flex-grow-1 bd-highlight"><strong>@Html.DisplayFor(modelItem => item.User.UserName)</strong></div>
-			<div class="bd-highlight"><em>@Html.DisplayFor(modelItem => item.PostDate)</em></div>
+			<div class="bd-highlight">
+				@if (item.EditDate == DateTime.MinValue || item.EditDate == item.PostDate)
+				{
+					<em>@Html.DisplayFor(modelItem => item.PostDate)</em>
+				} else
+				{
+					<em>@Html.DisplayFor(modelItem => item.PostDate), zmodyfikowano: @Html.DisplayFor(modelItem => item.EditDate)</em>
+				}
+			</div>
 		</div>
 		<div class="card-body">
-			<h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-			<p class="card-text">@Html.DisplayFor(modelItem => item.Content)</p>
+			<h3 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h3>
+			<p class="card-text" style="white-space: pre-line">@Html.DisplayFor(modelItem => item.Content)</p>
 		</div>
 		<div class="card-footer d-flex align-items-center gap-3">
 			<div class="bd-highlight">

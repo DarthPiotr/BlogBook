@@ -39,7 +39,7 @@ namespace BlogBook.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PostDate")
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")

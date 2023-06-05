@@ -1,10 +1,81 @@
 ﻿@page
+@using Microsoft.AspNetCore.Identity;
 @model IndexModel
+@inject SignInManager<IdentityUser> SignInManager;
 @{
     ViewData["Title"] = "Home page";
 }
 
+@{
+	ViewData["Title"] = "Index";
+	var isSigned = SignInManager.IsSignedIn(User);
+	var userName = User?.Identity?.Name ?? "";
+}
+
+@functions {
+	string lmnoga(int n, string s1, string s2, string s3)
+	{
+		return (n == 1 ? s1 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? s2 : s3);
+	}
+}
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">BlogBook</h1>
+    <p>Tylko tutaj czekają na Ciebie najlepsze blogi!</p>
 </div>
+
+<hr />
+
+<h3>Popularne</h3>
+
+@foreach (var item in Model.Model)
+{
+
+	<div class="card shadow-sm">
+		<div class="card-header d-flex">
+			<div class="flex-grow-1 bd-highlight"><strong>@Html.DisplayFor(modelItem => item.User.UserName)</strong></div>
+			<div class="bd-highlight">
+				@if (item.EditDate == DateTime.MinValue || item.EditDate == item.PostDate)
+				{
+					<em>@Html.DisplayFor(modelItem => item.PostDate)</em>
+				}
+				else
+				{
+					<em>@Html.DisplayFor(modelItem => item.PostDate), zmodyfikowano: @Html.DisplayFor(modelItem => item.EditDate)</em>
+				}
+			</div>
+		</div>
+		<div class="card-body">
+			<h3 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h3>
+			<p class="card-text" style="white-space: pre-line">@Html.DisplayFor(modelItem => item.Content)</p>
+		</div>
+		<div class="card-footer d-flex align-items-center gap-3">
+			<div class="bd-highlight">
+				<button type="button" class="btn btn-outline-secondary btn-sm @( isSigned || item.User.UserName == userName ? "" : "disabled" )">
+					<i class="bi bi-hand-thumbs-up"></i>
+				</button>
+			</div>
+			<div class="bd-highlight flex-grow-1">
+				<strong>
+					@Html.DisplayFor(modelItem => item.Likes)
+					@(lmnoga(item.Likes, "Polubienie", "Polubienia", "polubień"))
+				</strong>
+			</div>
+			@if (isSigned && item.User.UserName == userName)
+			{
+				<div class="bd-highlight">
+					<a href="@Url.Action("Edit", "Posts", new { id = item.Id })"
+					   class="btn btn-sm btn-outline-secondary">
+						<i class="bi bi-pencil"></i>
+					</a>
+				</div>
+				<div class="bd-highlight">
+					<a href="@Url.Action("Delete", "Posts", new { id = item.Id })"
+					   class="btn btn-sm btn-outline-danger">
+						<i class="bi bi-trash"></i>
+					</a>
+				</div>
+			}
+		</div>
+	</div>
+}
