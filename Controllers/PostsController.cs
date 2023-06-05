@@ -82,7 +82,7 @@ namespace BlogBook.Controllers
             {
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "/Posts");
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", post.UserId);
             return View(post);
