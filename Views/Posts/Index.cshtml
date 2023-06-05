@@ -1,59 +1,65 @@
-﻿@model IEnumerable<BlogBook.Model.Post>
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<BlogBook.Model.Post>
+@inject SignInManager<IdentityUser> SignInManager
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
+	var isSigned = SignInManager.IsSignedIn(User);
+	var userName = User?.Identity?.Name ?? "";
+}
+
+@functions {
+	string lmnoga(int n, string s1, string s2, string s3)
+	{
+		return (n == 1 ? s1 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? s2 : s3);
+	}
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+	<a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Likes)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Likes)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@foreach (var item in Model)
+{
+
+	<div class="card shadow-sm">
+		<div class="card-header d-flex">
+			<div class="flex-grow-1 bd-highlight"><strong>@Html.DisplayFor(modelItem => item.User.UserName)</strong></div>
+			<div class="bd-highlight"><em>@Html.DisplayFor(modelItem => item.PostDate)</em></div>
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+			<p class="card-text">@Html.DisplayFor(modelItem => item.Content)</p>
+		</div>
+		<div class="card-footer d-flex align-items-center gap-3">
+			<div class="bd-highlight">
+				<button type="button" class="btn btn-outline-secondary btn-sm @( isSigned || item.User.UserName == userName ? "" : "disabled" )">
+					<i class="bi bi-hand-thumbs-up"></i>
+				</button>
+			</div>
+			<div class="bd-highlight flex-grow-1">
+				<strong>
+					@Html.DisplayFor(modelItem => item.Likes)
+					@(lmnoga(item.Likes, "Polubienie", "Polubienia", "polubień"))
+				</strong>
+			</div>
+			@if (isSigned && item.User.UserName == userName)
+			{
+				<div class="bd-highlight">
+					<a href="@Url.Action("Edit", "Posts", new { id = item.Id })"
+					   class="btn btn-sm btn-outline-secondary">
+						<i class="bi bi-pencil"></i>
+					</a>
+				</div>
+				<div class="bd-highlight">
+					<a href="@Url.Action("Delete", "Posts", new { id = item.Id })"
+					   class="btn btn-sm btn-outline-danger">
+						<i class="bi bi-trash"></i>
+					</a>
+				</div>
+			}
+		</div>
+	</div>
 }
-    </tbody>
-</table>
