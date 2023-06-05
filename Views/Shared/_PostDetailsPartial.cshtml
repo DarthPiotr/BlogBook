@@ -6,44 +6,12 @@
 	ViewData["Title"] = "Index";
 	var isSigned = SignInManager.IsSignedIn(User);
 	var userName = User?.Identity?.Name ?? "";
-
-	var maxLength = 500;
 }
 
 @functions {
 	string lmnoga(int n, string s1, string s2, string s3)
 	{
 		return (n == 1 ? s1 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? s2 : s3);
-	}
-
-	bool WillBeTruncated(string? value, int maxLength)
-	{
-		if (value == null) return false;
-
-		if (value?.Length > maxLength)
-		{
-			return true;
-		}
-
-		return value?.Count(c => c == '\n') > 5;
-	}
-
-	string? Truncate(string? value, int maxLength, string truncationSuffix = "…")
-	{
-		if (!WillBeTruncated(value, maxLength)) return value;
-
-		var len = maxLength;
-		if (value?.Count(c => c == '\n') > 5)
-		{
-			var ix = 0;
-			for (int i = 0; i < 5; ++i)
-			{
-				ix = value.IndexOf('\n', ix) + 1;
-			}
-			len = ix;
-		}
-
-		return value.Substring(0, len) + truncationSuffix;
 	}
 }
 
@@ -67,17 +35,28 @@
 	</div>
 	<div class="card-body">
 		<h3 class="card-title">
-			<a href="@Url.Action("Details", "Posts", new { id = Model.Id })" >
+			<a href="@Url.Action("Details", "Posts", new { id = Model.Id })">
 				@Html.DisplayFor(modelItem => Model.Title)
 			</a>
 		</h3>
-		<p class="card-text crop-text" style="white-space: pre-line">@Truncate(Model.Content, maxLength)</p>
-		@if (WillBeTruncated(Model.Content, maxLength))
-		{
-			<a href="@Url.Action("Details", "Posts", new { id = Model.Id })">Zobacz więcej ></a>
-		}
+		<p class="card-text" style="white-space: pre-line">@Html.DisplayFor(modelItem => Model.Content)</p>
 	</div>
 	<div class="card-footer d-flex align-items-center gap-3">
+		@if (isSigned && Model.User.UserName == userName)
+		{
+			<div class="bd-highlight">
+				<a href="@Url.Action("Delete", "Posts", new { id = Model.Id })"
+				   class="btn btn-sm btn-outline-danger">
+					<i class="bi bi-trash"></i>
+				</a>
+			</div>
+			<div class="bd-highlight">
+				<a href="@Url.Action("Edit", "Posts", new { id = Model.Id })"
+				   class="btn btn-sm btn-outline-secondary">
+					<i class="bi bi-pencil"></i>
+				</a>
+			</div>
+		}
 		<div class="bd-highlight ms-auto">
 			<strong>
 				@Html.DisplayFor(modelItem => Model.Likes)

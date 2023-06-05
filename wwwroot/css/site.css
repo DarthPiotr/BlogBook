@@ -26,11 +26,20 @@ body {
     margin-top: 20px;
 }
 
-.card-header a {
+.card-header a,
+h3 a{
     text-decoration: none;
     color: inherit;
 }
 
 .flex-1 {
     flex: 1;
+}
+
+.crop-text {
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
 }
