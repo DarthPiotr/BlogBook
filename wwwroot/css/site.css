@@ -25,3 +25,8 @@ body {
 .card {
     margin-top: 20px;
 }
+
+.card-header a {
+    text-decoration: none;
+    color: inherit;
+}

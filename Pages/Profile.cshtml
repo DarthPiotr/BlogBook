@@ -1,68 +1,30 @@
 ﻿@page "{userName?}"
 @using BlogBook.Model;
+@using Microsoft.AspNetCore.Identity;
 @model BlogBook.Pages.ProfileModel
+@inject SignInManager<IdentityUser> SignInManager
 
 @{
-    ViewData["Title"] = "Profile";
+	ViewData["Title"] = "Index";
+	var isSigned = SignInManager.IsSignedIn(User);
+	var userName = User?.Identity?.Name ?? "";
 }
 
-<h1>Index</h1>
+@{
+	ViewData["Title"] = "Profile";
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameForInnerType((Post post) => post.Id)
-            </th>
-            <th>
-                @Html.DisplayNameForInnerType((Post post) => post.Title)
-            </th>
-            <th>
-                @Html.DisplayNameForInnerType((Post post) => post.Content)
-            </th>
-            <th>
-                @Html.DisplayNameForInnerType((Post post) => post.User.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameForInnerType((Post post) => post.Likes)
-			</th>
-			<th>
-				@Html.DisplayNameForInnerType((Post post) => post.PostDate)
-			</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Posts)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Content)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.User.UserName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Likes)
-				</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PostDate)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<h1>@Model.ProfileUser.UserName</h1>
+<h5> Posty: @Model.Posts.Count</h5>
+<hr />
+
+@if (isSigned && userName == Model.ProfileUser.UserName)
+{
+	@await Html.PartialAsync("_PostNewPartial")
+}
+
+@foreach (var item in Model.Posts)
+{
+	@await Html.PartialAsync("_PostPartial", item)
+}
+
