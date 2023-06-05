@@ -1,8 +1,12 @@
 ﻿@page
 @using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager
 @model IndexModel
 @{
     ViewData["Title"] = "Główna";
+
+    var isSigned = SignInManager.IsSignedIn(User);
+    var userName = User?.Identity?.Name ?? "";
 }
 
 <div class="text-center">
@@ -16,7 +20,13 @@
 	<div class="flex-1 card shadow-lg p-3">
         <h3>Dziel się</h3>
         <p>Spełniaj marzenia przez dzielenie się przeżyciami! Załóż konto i rozpocznij niesamowitą podróż w świat mikroblogowania!</p>
-        <a class="btn btn btn-outline-primary mt-auto" asp-page="/Register">Załóż konto</a>
+        @if (isSigned)
+        {
+            <a class="btn btn btn-outline-primary mt-auto" href="@Url.Action("Create", "/Posts")">Stwórz wpis</a>
+        } else
+        {
+            <a class="btn btn btn-outline-primary mt-auto" asp-page="/Register">Załóż konto</a>
+        }
     </div>
     <div class="flex-1 card shadow-lg p-3">
         <h3>Odkrywaj</h3>
@@ -32,7 +42,5 @@
 
 @foreach (var item in Model.Model)
 {
-
 	@await Html.PartialAsync("_PostPartial", item)
-
 }
