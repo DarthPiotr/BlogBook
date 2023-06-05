@@ -1,6 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 
+@{
+	bool canSearch = false;
+
+	var controllerName = this.ViewContext?.RouteData?.Values["controller"]?.ToString() ?? "";
+	var pageName = this.ViewContext?.RouteData?.Values["page"]?.ToString() ?? "";
+	var actionName = this.ViewContext?.RouteData?.Values["action"]?.ToString() ?? "";
+
+	if (controllerName == "Posts" && actionName == "Index") canSearch = true;
+	else if (pageName == "/Profile") canSearch = true;
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +38,7 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<!-- Navbar brand -->
 					<a class="navbar-brand mt-2 mt-lg-0" href="#">
-						<img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+						<img src="~/favicon.ico"
 							 height="15"
 							 alt="MDB Logo"
 							 loading="lazy" />
@@ -37,13 +48,20 @@
 						<li>
 							@Html.ActionLink("Posty", "Index", "/Posts", null, new { @class = "nav-link" })
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Team</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Projects</a>
-						</li>
 					</ul>
+					@if (canSearch)
+					{
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+								<li><a class="nav-link"></a></li>
+								<li>
+									<form class="d-flex" role="search">
+										<input class="form-control me-2" type="search" name="query" placeholder="Szukaj" aria-label="Search">
+										<button class="btn btn-outline-light" type="submit">Szukaj</button>
+									</form>
+								</li>
+
+						</ul>
+					}
 					<!-- Left links -->
 					<!-- Right elements -->
 					<div class="d-flex align-items-center">

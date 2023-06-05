@@ -16,7 +16,10 @@ builder.Services.AddDbContext<BlogbookDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BlogbookDbContext>();
 builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
 
-builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentityCore<IdentityUser>(options => {
+	options.SignIn.RequireConfirmedAccount = true;
+	options.User.RequireUniqueEmail = true;
+})
 				.AddEntityFrameworkStores<BlogbookDbContext>()
 				.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
 

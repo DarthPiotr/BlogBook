@@ -24,11 +24,27 @@ namespace BlogBook.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? query)
         {
-            var blogbookDbContext = _context.Post.Include(p => p.User);
-            return View(await blogbookDbContext.ToListAsync());
-        }
+            if (!string.IsNullOrEmpty(query))
+            {
+
+                var filteredContext = _context.Post
+                    .Where(p => EF.Functions.Like(p.Content, $"%{query}%") || 
+                                EF.Functions.Like(p.Title, $"%{query}%") || 
+                                EF.Functions.Like(p.User.UserName, $"%{query}%"))
+                //var filteredContext = _context.Post.Where(p => p.Content.Contains(query, StringComparison.OrdinalIgnoreCase) 
+                //|| p.Title.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+                //|| p.User.UserName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+                //)
+                .Include(p => p.User);
+
+                return View(await filteredContext.ToListAsync());
+            }
+
+			var blogbookDbContext = _context.Post.Include(p => p.User);
+			return View(await blogbookDbContext.ToListAsync());
+		}
 
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
