@@ -17,7 +17,9 @@ namespace BlogBook.Controllers
         private readonly BlogbookDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public PostsController(BlogbookDbContext context, UserManager<IdentityUser> userManager)
+        private IdentityUser? _currentUser;
+
+		public PostsController(BlogbookDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -79,9 +81,8 @@ namespace BlogBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Content")] Post post)
         {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user != null)
+            var user = await GetCurrentUser();
+			if (user != null)
             {
                 post.PostDate = DateTime.Now;
                 post.EditDate = post.PostDate;
@@ -103,8 +104,9 @@ namespace BlogBook.Controllers
             return View(post);
         }
 
-        // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: Posts/Edit/5
+		[Authorize]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Post == null)
             {
@@ -114,8 +116,14 @@ namespace BlogBook.Controllers
             var post = await _context.Post.FindAsync(id);
             if (post == null)
             {
-                return NotFound();
+				return NotFound();
             }
+
+			if (!await CheckIfCurrentUser(post.UserId))
+			{
+				return RedirectToAction("Index", "/Posts");
+			}
+
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", post.UserId);
             return View(post);
         }
@@ -124,7 +132,8 @@ namespace BlogBook.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+		[Authorize]
+		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Title,PostDate,Content,Likes")] Post post)
         {
             if (id != post.Id)
@@ -132,8 +141,13 @@ namespace BlogBook.Controllers
                 return NotFound();
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
+			if (!await CheckIfCurrentUser(post.UserId))
+			{
+				return RedirectToAction("Index", "/Posts");
+			}
+
+            var user = await GetCurrentUser();
+			if (user != null)
             {
                 post.User = user;
 				post.EditDate = DateTime.Now;
@@ -166,8 +180,9 @@ namespace BlogBook.Controllers
             return View(post);
         }
 
-        // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		// GET: Posts/Delete/5
+		[Authorize]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Post == null)
             {
@@ -182,12 +197,18 @@ namespace BlogBook.Controllers
                 return NotFound();
             }
 
-            return View(post);
+			if (!await CheckIfCurrentUser(post.UserId))
+            {
+                return RedirectToAction("Index", "/Posts");
+			}
+
+			return View(post);
         }
 
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+		[Authorize]
+		[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Post == null)
@@ -197,7 +218,12 @@ namespace BlogBook.Controllers
             var post = await _context.Post.FindAsync(id);
             if (post != null)
             {
-                _context.Post.Remove(post);
+				if (!await CheckIfCurrentUser(post.UserId))
+				{
+					return RedirectToAction("Index", "/Posts");
+				}
+
+				_context.Post.Remove(post);
             }
             
             await _context.SaveChangesAsync();
@@ -208,5 +234,17 @@ namespace BlogBook.Controllers
         {
           return (_context.Post?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        private async Task<IdentityUser> GetCurrentUser()
+        {
+            _currentUser ??= await _userManager.GetUserAsync(User);
+            return _currentUser;
+        }
+
+        private async Task<bool> CheckIfCurrentUser(string id)
+        {
+			var user = await _userManager.GetUserAsync(User);
+            return (user?.Id ?? "") == id;
+		}
     }
 }
