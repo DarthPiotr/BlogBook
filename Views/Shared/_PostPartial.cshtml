@@ -85,7 +85,7 @@
 			</strong>
 		</div>
 		<div class="bd-highlight">
-			<button type="button" class="btn btn-outline-primary btn-sm @( isSigned || Model.User.UserName == userName ? "" : "disabled" )">
+			<button type="button" class="btn btn-sm @( !isSigned || Model.User.UserName == userName ? "btn-outline-secondary disabled" : "btn-outline-success" )">
 				<i class="bi bi-hand-thumbs-up"></i>
 			</button>
 		</div>

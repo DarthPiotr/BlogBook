@@ -5,13 +5,9 @@
 @inject SignInManager<IdentityUser> SignInManager
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "Profil";
 	var isSigned = SignInManager.IsSignedIn(User);
 	var userName = User?.Identity?.Name ?? "";
-}
-
-@{
-	ViewData["Title"] = "Profile";
 }
 
 <h1>@Model.ProfileUser.UserName</h1>

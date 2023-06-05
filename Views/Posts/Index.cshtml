@@ -1,13 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity;
+@using BlogBook.Model;
+@inject SignInManager<IdentityUser> SignInManager
 @model IEnumerable<BlogBook.Model.Post>
 
 @{
 	ViewData["Title"] = "Index";
+	var isSigned = SignInManager.IsSignedIn(User);
 }
 
-
-@await Html.PartialAsync("_PostNewPartial")
-
+@if (isSigned)
+{
+	@await Html.PartialAsync("_PostNewPartial")
+}
 @foreach (var item in Model)
 {
 	@await Html.PartialAsync("_PostPartial", item)

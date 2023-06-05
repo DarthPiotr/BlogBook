@@ -10,9 +10,11 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <p>Czy na pewno chcesz się wylogować?</p>
-            <button class="btn btn-primary" asp-page-handler="Logout">Tak</button>
-            <button class="btn btn-light m-lg-5 border-dark" asp-page-handler="NoLogout">Nie</button>
+            <h5>Czy na pewno chcesz się wylogować?</h5>
+            <div class="d-flex align-items-center gap-3 mt-4">
+				<button class="btn btn-primary ps-4 pe-4" asp-page-handler="Logout">Tak</button>
+				<button class="btn btn-light border-dark ps-4 pe-4" asp-page-handler="NoLogout">Nie</button>
+            </div>
         </form>
     </div>
 </div>
