@@ -13,7 +13,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,7 +24,7 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	@*<link rel="stylesheet" href="~/BlogBook.styles.css" asp-append-version="true" />*@
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 	<header>
 
 		<!-- Navbar -->
@@ -98,15 +98,15 @@
 		</nav>
 		<!-- Navbar -->
 	</header>
-	<div class="container">
+	<div class="container flex-shrink-0">
 		<main role="main" class="pb-3">
 			@RenderBody()
 		</main>
 	</div>
 
-	<footer class="border-top footer text-muted">
+	<footer class="footer text-muted border-top mt-auto bg-light p-3">
 		<div class="container">
-			&copy; 2023 - BlogBook - <a asp-area="" asp-page="/Privacy">Privacy</a>
+			&copy; 2023 - BlogBook
 		</div>
 	</footer>
 

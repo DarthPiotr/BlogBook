@@ -30,3 +30,7 @@ body {
     text-decoration: none;
     color: inherit;
 }
+
+.flex-1 {
+    flex: 1;
+}

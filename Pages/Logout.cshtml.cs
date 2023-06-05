@@ -34,7 +34,7 @@ namespace BlogBook.Pages
             }
             else
             {
-                return RedirectToPage(returnUrl);
+                return Redirect(returnUrl);
             }
         }
     }

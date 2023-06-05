@@ -38,31 +38,31 @@
 		<p class="card-text" style="white-space: pre-line">@Html.DisplayFor(modelItem => Model.Content)</p>
 	</div>
 	<div class="card-footer d-flex align-items-center gap-3">
-		<div class="bd-highlight">
-			<button type="button" class="btn btn-outline-secondary btn-sm @( isSigned || Model.User.UserName == userName ? "" : "disabled" )">
-				<i class="bi bi-hand-thumbs-up"></i>
-			</button>
-		</div>
-		<div class="bd-highlight flex-grow-1">
-			<strong>
-				@Html.DisplayFor(modelItem => Model.Likes)
-				@(lmnoga(Model.Likes, "Polubienie", "Polubienia", "polubień"))
-			</strong>
-		</div>
 		@if (isSigned && Model.User.UserName == userName)
 		{
-			<div class="bd-highlight">
-				<a href="@Url.Action("Edit", "Posts", new { id = Model.Id })"
-				   class="btn btn-sm btn-outline-secondary">
-					<i class="bi bi-pencil"></i>
-				</a>
-			</div>
 			<div class="bd-highlight">
 				<a href="@Url.Action("Delete", "Posts", new { id = Model.Id })"
 				   class="btn btn-sm btn-outline-danger">
 					<i class="bi bi-trash"></i>
 				</a>
 			</div>
+			<div class="bd-highlight">
+				<a href="@Url.Action("Edit", "Posts", new { id = Model.Id })"
+				   class="btn btn-sm btn-outline-secondary">
+					<i class="bi bi-pencil"></i>
+				</a>
+			</div>
 		}
+		<div class="bd-highlight ms-auto">
+			<strong>
+				@Html.DisplayFor(modelItem => Model.Likes)
+				@(lmnoga(Model.Likes, "Polubienie", "Polubienia", "polubień"))
+			</strong>
+		</div>
+		<div class="bd-highlight">
+			<button type="button" class="btn btn-outline-primary btn-sm @( isSigned || Model.User.UserName == userName ? "" : "disabled" )">
+				<i class="bi bi-hand-thumbs-up"></i>
+			</button>
+		</div>
 	</div>
 </div>

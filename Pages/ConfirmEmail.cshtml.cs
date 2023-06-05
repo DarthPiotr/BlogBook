@@ -21,7 +21,7 @@ namespace BlogBook.Pages
         {
             if (userId == null || code == null)
             {
-                return RedirectToPage("Login");
+                return RedirectToPage("Login", new { returnUrl });
             }
             
             var user = await userManager.FindByIdAsync(userId);

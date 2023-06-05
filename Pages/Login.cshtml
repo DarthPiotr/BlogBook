@@ -26,30 +26,32 @@
 	}
 }
 <div class="row">
-	<div class="col-md-4">
-
+	<div class="col-md-5">
 
 		<form method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="form-group">
+			<div class="mb-3">
 				<label asp-for="Model.Email" class="control-label"></label>
 				<input asp-for="Model.Email" class="form-control" />
 				<span asp-validation-for="Model.Email" class="text-danger"></span>
 			</div>
-			<div class="form-group">
+			<div class="mb-3">
 				<label asp-for="Model.Password" class="control-label"></label>
 				<input asp-for="Model.Password" class="form-control" />
 				<span asp-validation-for="Model.Password" class="text-danger"></span>
 			</div>
-			<div class="form-group">
+			<div class="mb-3 form-check">
 				<input type="checkbox" asp-for="Model.RememberMe" class="form-check-input" />
 				<label asp-for="Model.RememberMe" class="control-label"></label>
-				<span asp-validation-for="Model.Password" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<input type="submit" value="Zaloguj" class="btn btn-primary" />
-			</div>
+			<input type="submit" value="Zaloguj" class="btn btn-primary" />
 		</form>
+		<div class="mb-5 p-3">
+			<p>
+				Nie masz jeszcze konta? <a asp-page="/Register">Zarejestruj się!</a>
+			</p>
+		</div>
+
 	</div>
 </div>
 

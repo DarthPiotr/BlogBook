@@ -53,7 +53,7 @@ namespace BlogBook.Pages
 					}
 					else
 					{
-						return RedirectToPage(ReturnUrl);
+						return Redirect(ReturnUrl);
 					}
 				}
 

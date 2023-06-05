@@ -27,7 +27,9 @@ namespace BlogBook.Pages
 		public async Task<IActionResult> OnGet()
         {
 			var blogbookDbContext = _context.Post.Include(p => p.User)
-				.OrderByDescending(p => p.Likes).Take(5);
+				.OrderByDescending(p => p.Likes)
+				.ThenByDescending(p => p.PostDate)
+				.Take(5);
 
 			Model = await blogbookDbContext.ToListAsync();
 
