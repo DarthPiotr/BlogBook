@@ -10,12 +10,12 @@ namespace BlogBook.Pages
 	public class ProfileModel : PageModel
 	{
 		public List<Post> Posts { get; set; }
-		public IdentityUser ProfileUser { get; set; }
+		public AppIdentityUser ProfileUser { get; set; }
 
 		private readonly BlogbookDbContext _context;
-		private readonly UserManager<IdentityUser> _userManager;
+		private readonly UserManager<AppIdentityUser> _userManager;
 
-		public ProfileModel(BlogbookDbContext context, UserManager<IdentityUser> userManager)
+		public ProfileModel(BlogbookDbContext context, UserManager<AppIdentityUser> userManager)
 		{
 			_context = context;
 			_userManager = userManager;

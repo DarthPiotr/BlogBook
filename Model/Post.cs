@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogBook.Model
 {
@@ -15,7 +16,7 @@ namespace BlogBook.Model
 		[Required]
 		[ForeignKey("User")]
 		public string UserId { get; set; }
-		public IdentityUser User { get; set; } = null!;
+		public AppIdentityUser User { get; set; } = null!;
 
 		[Required]
 		[DisplayName("Tytuł")]
@@ -35,7 +36,7 @@ namespace BlogBook.Model
 		public string? Content { get; set; }
 
 		[DisplayName("Polubienia")]
-		public int Likes { get; set; } = 0;
-
+		[DeleteBehavior(DeleteBehavior.NoAction)]
+		public ICollection<Like> Likes { get;} = new List<Like>();
 	}
 }

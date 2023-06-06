@@ -1,3 +1,4 @@
+using BlogBook.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,14 +7,14 @@ namespace BlogBook.Pages
 {
     public class LoginModel : PageModel
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private UserManager<AppIdentityUser> userManager;
+        private SignInManager<AppIdentityUser> signInManager;
 
 		[BindProperty]
         public ViewModel.Login Model { get; set; }
 
 
-		public LoginModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+		public LoginModel(UserManager<AppIdentityUser> userManager, SignInManager<AppIdentityUser> signInManager)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;

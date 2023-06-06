@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using BlogBook.Model;
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<AppIdentityUser> SignInManager
 @model IEnumerable<BlogBook.Model.Post>
 
 @{
@@ -14,5 +14,7 @@
 }
 @foreach (var item in Model)
 {
-	@await Html.PartialAsync("_PostPartial", item)
+	<div id="post_@item.Id">
+		@await Html.PartialAsync("_PostPartial", item)
+	</div>
 }

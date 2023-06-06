@@ -13,15 +13,15 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<BlogbookDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BlogBookContext") ?? throw new InvalidOperationException("Connection string 'BlogBookContext' not found.")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BlogbookDbContext>();
+builder.Services.AddIdentity<AppIdentityUser, IdentityRole>().AddEntityFrameworkStores<BlogbookDbContext>();
 builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
 
-builder.Services.AddIdentityCore<IdentityUser>(options => {
+builder.Services.AddIdentityCore<AppIdentityUser>(options => {
 	options.SignIn.RequireConfirmedAccount = true;
 	options.User.RequireUniqueEmail = true;
 })
 				.AddEntityFrameworkStores<BlogbookDbContext>()
-				.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+				.AddTokenProvider<DataProtectorTokenProvider<AppIdentityUser>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddTransient<IEmailSender, EmailService>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);

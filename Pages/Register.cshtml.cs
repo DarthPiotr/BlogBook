@@ -1,3 +1,4 @@
+using BlogBook.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +11,14 @@ namespace BlogBook.Pages
 {
     public class RegisterModel : PageModel
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private UserManager<AppIdentityUser> userManager;
+        private SignInManager<AppIdentityUser> signInManager;
 		private readonly IEmailSender _sender;
 
 		[BindProperty]
         public ViewModel.Register Model { get; set; }
 
-        public RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailSender sender)
+        public RegisterModel(UserManager<AppIdentityUser> userManager, SignInManager<AppIdentityUser> signInManager, IEmailSender sender)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -35,7 +36,7 @@ namespace BlogBook.Pages
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser()
+                var user = new AppIdentityUser()
                 {
                     UserName = Model.Username,
                     Email = Model.Email

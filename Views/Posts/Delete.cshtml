@@ -5,8 +5,10 @@
 }
 
 <h2>Czy chcesz usunąć ten wpis?</h2>
+<div id="post_@Model.Id">
+	@await Html.PartialAsync("_PostPartial", Model)
+</div>
 
-@await Html.PartialAsync("_PostPartial", Model)
 
 <form class="d-flex mt-5" asp-action="Delete">
 	<input type="hidden" asp-for="Id" />

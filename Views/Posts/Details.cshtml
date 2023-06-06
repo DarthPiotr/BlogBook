@@ -5,7 +5,8 @@
 }
 
 <h1>Szczegóły</h1>
-
-@await Html.PartialAsync("_PostDetailsPartial", Model)
+<div id="post_@Model.Id">
+	@await Html.PartialAsync("_PostDetailsPartial", Model)
+</div>
 
 <a class="btn btn-outline-secondary mt-5" asp-action="Index" asp-controller="/Posts">Powrót</a>

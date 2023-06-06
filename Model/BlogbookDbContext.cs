@@ -11,5 +11,6 @@ namespace BlogBook.Model
 
         }
         public DbSet<BlogBook.Model.Post> Post { get; set; } = default!;
+        public DbSet<BlogBook.Model.Like> Like { get; set; } = default!;
     }
 }

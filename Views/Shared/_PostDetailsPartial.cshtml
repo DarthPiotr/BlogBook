@@ -1,11 +1,22 @@
-﻿@using Microsoft.AspNetCore.Identity;
+﻿@using BlogBook.Model;
+@using Microsoft.AspNetCore.Identity;
 @model BlogBook.Model.Post
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<AppIdentityUser> SignInManager
 
 @{
 	ViewData["Title"] = "Index";
 	var isSigned = SignInManager.IsSignedIn(User);
 	var userName = User?.Identity?.Name ?? "";
+
+	int likeStatus = 0; // disabled
+	if (isSigned && Model.User.UserName != userName)
+	{
+		likeStatus = 1; // enabled
+		if (Model.Likes.Any(like => like.User.UserName == userName))
+		{
+			likeStatus = 2; // liked
+		}
+	}
 }
 
 @functions {
@@ -59,14 +70,15 @@
 		}
 		<div class="bd-highlight ms-auto">
 			<strong>
-				@Html.DisplayFor(modelItem => Model.Likes)
-				@(lmnoga(Model.Likes, "Polubienie", "Polubienia", "polubień"))
+				@Html.DisplayFor(modelItem => Model.Likes.Count)
+				@(lmnoga(Model.Likes.Count, "Polubienie", "Polubienia", "polubień"))
 			</strong>
 		</div>
 		<div class="bd-highlight">
-			<button type="button" class="btn btn-sm @( !isSigned || Model.User.UserName == userName ? "btn-outline-secondary disabled" : "btn-outline-success" )">
+			<a type="button" onclick="like(@(Model.Id), true)"
+			   class="btn btn-sm @( likeStatus == 0 ? "btn-outline-secondary disabled" : likeStatus == 1 ? "btn-outline-success" : "btn-success")">
 				<i class="bi bi-hand-thumbs-up"></i>
-			</button>
+			</a>
 		</div>
 	</div>
 </div>

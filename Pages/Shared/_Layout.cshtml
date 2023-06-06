@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
+﻿@using BlogBook.Model;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppIdentityUser> SignInManager
 
 @{
 	bool canSearch = false;
@@ -116,5 +117,23 @@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
+
+	<script>
+		function like(id, full=false) {
+			$.ajax({
+				url: "@Url.Action("LikeAction", "Posts", new { id = 0 })".replace("0", id),
+				type: "Post",
+				dataType: 'text',
+				headers:  { "x-partial-type": `${full ? "Details" : "Short"}` },
+				success: function (res) {
+					$("#post_" + id).html(res);
+				},
+				error: function (res) {
+					console.log("Error!");
+					console.log(res);
+				}
+			});
+		}
+	</script>
 </body>
 </html>

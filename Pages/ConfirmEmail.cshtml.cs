@@ -1,3 +1,4 @@
+using BlogBook.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,10 +9,10 @@ namespace BlogBook.Pages
 {
     public class ConfirmEmailModel : PageModel
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private UserManager<AppIdentityUser> userManager;
+        private SignInManager<AppIdentityUser> signInManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ConfirmEmailModel(UserManager<AppIdentityUser> userManager, SignInManager<AppIdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

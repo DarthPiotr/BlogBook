@@ -9,17 +9,20 @@ using BlogBook.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using BlogBook.Pages.Shared;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlogBook.Controllers
 {
     public class PostsController : Controller
     {
         private readonly BlogbookDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppIdentityUser> _userManager;
 
-        private IdentityUser? _currentUser;
+        private AppIdentityUser? _currentUser;
 
-		public PostsController(BlogbookDbContext context, UserManager<IdentityUser> userManager)
+		public PostsController(BlogbookDbContext context, UserManager<AppIdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -36,13 +39,18 @@ namespace BlogBook.Controllers
                                 EF.Functions.Like(p.Title, $"%{query}%") || 
                                 EF.Functions.Like(p.User.UserName, $"%{query}%"))
                 .Include(p => p.User)
-                .OrderByDescending(p => p.PostDate);
+                .Include(p => p.Likes)
+					.ThenInclude(l => l.User)
+				.OrderByDescending(p => p.PostDate);
 
                 return View(await filteredContext.ToListAsync());
             }
 
-			var blogbookDbContext = _context.Post.Include(p => p.User)
-                .OrderByDescending(p => p.PostDate);
+			var blogbookDbContext = _context.Post
+                .Include(p => p.User)
+				.Include(p => p.Likes)
+					.ThenInclude(l => l.User)
+				.OrderByDescending(p => p.PostDate);
 			return View(await blogbookDbContext.ToListAsync());
 		}
 
@@ -56,7 +64,9 @@ namespace BlogBook.Controllers
 
             var post = await _context.Post
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+				.Include(p => p.Likes)
+					.ThenInclude(l => l.User)
+				.FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
             {
                 return NotFound();
@@ -86,7 +96,6 @@ namespace BlogBook.Controllers
             {
                 post.PostDate = DateTime.Now;
                 post.EditDate = post.PostDate;
-                post.Likes = 0;
                 post.UserId = user.Id;
                 post.User = user;
 
@@ -191,7 +200,9 @@ namespace BlogBook.Controllers
 
             var post = await _context.Post
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+				.Include(p => p.Likes)
+					.ThenInclude(l => l.User)
+				.FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
             {
                 return NotFound();
@@ -215,19 +226,96 @@ namespace BlogBook.Controllers
             {
                 return Problem("Entity set 'BlogbookDbContext.Post'  is null.");
             }
-            var post = await _context.Post.FindAsync(id);
-            if (post != null)
+            var post = await _context.Post
+				.Include(p => p.Likes)
+				.FirstOrDefaultAsync(m => m.Id == id);
+
+			if (post != null)
             {
 				if (!await CheckIfCurrentUser(post.UserId))
 				{
 					return RedirectToAction("Index", "/Posts");
 				}
 
-				_context.Post.Remove(post);
+				try
+				{
+                    foreach(var like in post.Likes)
+                    {
+                        _context.Like.Remove(like);
+                    }
+                    await _context.SaveChangesAsync();
+
+					_context.Post.Remove(post);
+                    await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!PostExists(post.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "/Posts");
+		}
+
+        // POST: Posts/LikeAction/5
+		[HttpPost, ActionName("LikeAction")]
+		[Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LikeAction(int? id)
+        {
+			if (id == null || _context.Post == null)
+			{
+				return NotFound();
+			}
+
+			var post = await _context.Post
+				.Include(p => p.User)
+				.Include(p => p.Likes)
+					.ThenInclude(l => l.User)
+				.FirstOrDefaultAsync(p => p.Id == id);
+			if (post == null)
+			{
+				return NotFound();
+			}
+
+			var user = await GetCurrentUser();
+			if (user != null)
+			{
+                try
+				{
+                    var like = post.Likes.FirstOrDefault(like => like.User == user);
+                    if (like != null)
+                    {
+						post.Likes.Remove(like);
+					}
+                    else
+                    {
+				        post.Likes.Add(new Like { Post = post, User = user});
+                    }
+
+				    _context.Update(post);
+				    await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!PostExists(post.Id))
+					{
+						return NotFound();
+					}
+				}
+			}
+
+            var headerPartialType = HttpContext.Request.Headers["x-partial-type"].ToString();
+            var viewName = headerPartialType == "Details" ? "_PostDetailsPartial" : "_PostPartial";
+
+			return PartialView(viewName, post);
         }
 
         private bool PostExists(int id)
@@ -235,7 +323,7 @@ namespace BlogBook.Controllers
           return (_context.Post?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private async Task<IdentityUser> GetCurrentUser()
+        private async Task<AppIdentityUser> GetCurrentUser()
         {
             _currentUser ??= await _userManager.GetUserAsync(User);
             return _currentUser;

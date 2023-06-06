@@ -1,41 +1,38 @@
 ﻿@model BlogBook.Model.Post
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit";
 }
 
 <h1>Edycja</h1>
 <hr />
 <div class="row">
-    <div class="col-md-10">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="UserId" />
-            <input type="hidden" asp-for="PostDate" />
-            <div class="mb-3">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control" rows="7"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Likes" class="control-label"></label>
-                <input asp-for="Likes" class="form-control" />
-                <span asp-validation-for="Likes" class="text-danger"></span>
-            </div>
+	<div class="col-md-10">
+		<form asp-action="Edit">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+			<input type="hidden" asp-for="UserId" />
+			<input type="hidden" asp-for="PostDate" />
 			<div class="mb-3">
-                <a class="btn btn-outline-secondary me-3" asp-action="Index" asp-controller="/Posts">Powrót</a> 
-                <input type="submit" value="Zapisz" class="btn btn-success" />
-            </div>
-        </form>
-    </div>
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<label asp-for="Content" class="control-label"></label>
+				<textarea asp-for="Content" class="form-control" rows="7"></textarea>
+				<span asp-validation-for="Content" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<a class="btn btn-outline-secondary me-3" asp-action="Index" asp-controller="/Posts">Powrót</a>
+				<input type="submit" value="Zapisz" class="btn btn-success" />
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
