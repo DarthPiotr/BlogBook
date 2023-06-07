@@ -43,3 +43,12 @@ h3 a{
     display: -webkit-box;
     -webkit-box-orient: vertical;
 }
+
+.link {
+    cursor: pointer;
+    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    text-decoration: underline;
+}
+.link:hover {
+    --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+}

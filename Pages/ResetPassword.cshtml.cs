@@ -103,7 +103,6 @@ namespace BlogBook.Pages
                     {
 						ViewData["messageBad"] = $"Coœ posz³o nie tak... Spróbuj jeszcze raz";
 						ViewData["reason"] = "ForgotPassword";
-						return Page();
 					}
 				}
 			}
