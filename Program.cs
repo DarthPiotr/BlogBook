@@ -17,6 +17,9 @@ builder.Services.AddIdentity<AppIdentityUser, IdentityRole>().AddEntityFramework
 builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
 
 builder.Services.AddIdentityCore<AppIdentityUser>(options => {
+	options.User.AllowedUserNameCharacters =
+	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
 	options.SignIn.RequireConfirmedAccount = true;
 	options.User.RequireUniqueEmail = true;
 })

@@ -35,7 +35,7 @@ namespace BlogBook.Service
 			var client = new SendGridClient(apiKey);
 			var msg = new SendGridMessage()
 			{
-				From = new EmailAddress("piotr.marciniak@student.put.poznan.pl", "Weryfikacja BlogBook"),
+				From = new EmailAddress("piotr.marciniak@student.put.poznan.pl", "BlogBook"),
 				Subject = subject,
 				PlainTextContent = message,
 				HtmlContent = message
