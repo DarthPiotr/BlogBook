@@ -266,8 +266,8 @@ namespace BlogBook.Controllers
 
         // POST: Posts/LikeAction/5
 		[HttpPost, ActionName("LikeAction")]
-		[Authorize]
-        [ValidateAntiForgeryToken]
+		//[Authorize]
+  //      [ValidateAntiForgeryToken]
         public async Task<IActionResult> LikeAction(int? id)
         {
 			if (id == null || _context.Post == null)
